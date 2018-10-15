@@ -62,11 +62,11 @@ set(NS3_GNUPLOT OFF)
 option(NS3_BRITE "Build with Brite support" OFF)
 set(NS3_BRITE OFF)
 
-option(NS3_NETANIM "Build netanim support" OFF)
-set(NS3_NETANIM OFF)
+option(NS3_NETANIM "Build netanim support" ON)
+set(NS3_NETANIM ON)
 
-option(AUTOINSTALL_DEPENDENCIES "Automatically download and compile required dependencies with Vcpkg" OFF)
-set(AUTOINSTALL_DEPENDENCIES OFF)
+option(AUTOINSTALL_DEPENDENCIES "Automatically download and compile required dependencies with Vcpkg" ON)
+set(AUTOINSTALL_DEPENDENCIES ON)
 
 #Select libs to be built
 # libs marked with # on the right are compiling on windows

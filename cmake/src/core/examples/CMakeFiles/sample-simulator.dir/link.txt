@@ -1,1 +1,0 @@
-/usr/bin/c++      CMakeFiles/sample-simulator.dir/sample-simulator.cc.o  -o ../../../../build/bin/examples/core/sample-simulator  -L/usr/lib/x86_64-linux-gnu/libgsl.so -rdynamic ../../../../build/lib/libns3.27-core-debug.so -lgsl -lgslcblas -lpthread -Wl,-rpath,/usr/lib/x86_64-linux-gnu/libgsl.so:/home/range/Documents/NS3/build/lib 
