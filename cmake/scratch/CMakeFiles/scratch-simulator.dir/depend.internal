@@ -7,8 +7,11 @@ scratch/CMakeFiles/scratch-simulator.dir/scratch-simulator.cc.o
  ../build/ns3/abort.h
  ../build/ns3/address-utils.h
  ../build/ns3/address.h
+ ../build/ns3/animation-interface.h
  ../build/ns3/application-container.h
+ ../build/ns3/application-packet-probe.h
  ../build/ns3/application.h
+ ../build/ns3/applications-module.h
  ../build/ns3/ascii-file.h
  ../build/ns3/ascii-test.h
  ../build/ns3/assert.h
@@ -23,6 +26,8 @@ scratch/CMakeFiles/scratch-simulator.dir/scratch-simulator.cc.o
  ../build/ns3/buffer.h
  ../build/ns3/build-profile.h
  ../build/ns3/buildings-helper.h
+ ../build/ns3/bulk-send-application.h
+ ../build/ns3/bulk-send-helper.h
  ../build/ns3/byte-tag-list.h
  ../build/ns3/cairo-wideint-private.h
  ../build/ns3/calendar-scheduler.h
@@ -53,6 +58,7 @@ scratch/CMakeFiles/scratch-simulator.dir/scratch-simulator.cc.o
  ../build/ns3/delay-jitter-estimation.h
  ../build/ns3/deprecated.h
  ../build/ns3/des-metrics.h
+ ../build/ns3/device-energy-model.h
  ../build/ns3/double.h
  ../build/ns3/drop-tail-queue.h
  ../build/ns3/dynamic-queue-limits.h
@@ -116,7 +122,9 @@ scratch/CMakeFiles/scratch-simulator.dir/scratch-simulator.cc.o
  ../build/ns3/ipv4-header.h
  ../build/ns3/ipv4-interface-address.h
  ../build/ns3/ipv4-interface-container.h
+ ../build/ns3/ipv4-l3-protocol.h
  ../build/ns3/ipv4-route.h
+ ../build/ns3/ipv4-routing-protocol.h
  ../build/ns3/ipv4.h
  ../build/ns3/ipv6-address-helper.h
  ../build/ns3/ipv6-address.h
@@ -219,6 +227,7 @@ scratch/CMakeFiles/scratch-simulator.dir/scratch-simulator.cc.o
  ../build/ns3/net-device-container.h
  ../build/ns3/net-device-queue-interface.h
  ../build/ns3/net-device.h
+ ../build/ns3/netanim-module.h
  ../build/ns3/network-module.h
  ../build/ns3/nix-vector.h
  ../build/ns3/no-op-component-carrier-manager.h
@@ -235,11 +244,16 @@ scratch/CMakeFiles/scratch-simulator.dir/scratch-simulator.cc.o
  ../build/ns3/object-ptr-container.h
  ../build/ns3/object-vector.h
  ../build/ns3/object.h
+ ../build/ns3/on-off-helper.h
+ ../build/ns3/onoff-application.h
  ../build/ns3/output-stream-wrapper.h
  ../build/ns3/packet-burst.h
  ../build/ns3/packet-data-calculators.h
+ ../build/ns3/packet-loss-counter.h
  ../build/ns3/packet-metadata.h
  ../build/ns3/packet-probe.h
+ ../build/ns3/packet-sink-helper.h
+ ../build/ns3/packet-sink.h
  ../build/ns3/packet-socket-address.h
  ../build/ns3/packet-socket-client.h
  ../build/ns3/packet-socket-factory.h
@@ -285,6 +299,7 @@ scratch/CMakeFiles/scratch-simulator.dir/scratch-simulator.cc.o
  ../build/ns3/rng-stream.h
  ../build/ns3/rr-ff-mac-scheduler.h
  ../build/ns3/scheduler.h
+ ../build/ns3/seq-ts-header.h
  ../build/ns3/sequence-number.h
  ../build/ns3/sgi-hashmap.h
  ../build/ns3/simple-channel.h
@@ -320,6 +335,11 @@ scratch/CMakeFiles/scratch-simulator.dir/scratch-simulator.cc.o
  ../build/ns3/tdmt-ff-mac-scheduler.h
  ../build/ns3/tdtbfq-ff-mac-scheduler.h
  ../build/ns3/test.h
+ ../build/ns3/three-gpp-http-client.h
+ ../build/ns3/three-gpp-http-header.h
+ ../build/ns3/three-gpp-http-helper.h
+ ../build/ns3/three-gpp-http-server.h
+ ../build/ns3/three-gpp-http-variables.h
  ../build/ns3/timer-impl.h
  ../build/ns3/timer.h
  ../build/ns3/trace-fading-loss-model.h
@@ -332,6 +352,19 @@ scratch/CMakeFiles/scratch-simulator.dir/scratch-simulator.cc.o
  ../build/ns3/type-id.h
  ../build/ns3/type-name.h
  ../build/ns3/type-traits.h
+ ../build/ns3/uan-mac.h
+ ../build/ns3/uan-phy-gen.h
+ ../build/ns3/uan-phy.h
+ ../build/ns3/uan-prop-model.h
+ ../build/ns3/uan-transducer.h
+ ../build/ns3/uan-tx-mode.h
+ ../build/ns3/udp-client-server-helper.h
+ ../build/ns3/udp-client.h
+ ../build/ns3/udp-echo-client.h
+ ../build/ns3/udp-echo-helper.h
+ ../build/ns3/udp-echo-server.h
+ ../build/ns3/udp-server.h
+ ../build/ns3/udp-trace-client.h
  ../build/ns3/uinteger.h
  ../build/ns3/unix-fd-reader.h
  ../build/ns3/unused.h

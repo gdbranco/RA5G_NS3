@@ -1,40 +1,25 @@
-/* -*-  Mode: C++; c-file-style: "gnu"; indent-tabs-mode:nil; -*- */
-/*
- * Copyright (c) 2011 Centre Tecnologic de Telecomunicacions de Catalunya (CTTC)
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License version 2 as
- * published by the Free Software Foundation;
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
- *
- * Author: Manuel Requena <manuel.requena@cttc.es>
- */
-
-
 #include "ns3/core-module.h"
 #include "ns3/network-module.h"
 #include "ns3/mobility-module.h"
+#include "ns3/applications-module.h"
 #include "ns3/lte-module.h"
 #include "ns3/config-store.h"
-#include <ns3/buildings-helper.h>
+#include "ns3/buildings-helper.h"
+#include "ns3/netanim-module.h"
+
 //#include "ns3/gtk-config-store.h"
 
+using namespace std;
 using namespace ns3;
 
 int main (int argc, char *argv[])
 {
+
+    SeedManager::SetRun(42);
     //whether to use carrier aggregation
     bool useCa = false;
     uint32_t nUE = 2;
-    double simTime = 1.0;
+    double simTime = 1.5;
 
     CommandLine cmd;
     cmd.AddValue("useCa", "Whether to use carrier aggregation.", useCa);
@@ -63,8 +48,14 @@ int main (int argc, char *argv[])
     // Geometry of the scenario (meters)
     double roomLength = 50000;
     double nodeHeight = 1.5;
+    double bsHeight = 5;
     uint32_t nEnb = 1;
 
+
+    // HTTP Stuff
+    // Create HTTP Server
+
+    // Create HTTP Client
 
     // LTE HELPER constructor
     Ptr<LteHelper> lteHelper = CreateObject<LteHelper> ();
@@ -81,39 +72,33 @@ int main (int argc, char *argv[])
     ueNodes.Create (nUE);
 
     // Install Mobility Model
-    MobilityHelper mobility;
-    mobility.SetMobilityModel ("ns3::ConstantPositionMobilityModel");
     std::vector<Vector> enBPosition;
     std::vector<Vector> UEPosition;
-    Ptr<ListPositionAllocator> positionAlloc = CreateObject<ListPositionAllocator> ();
-
+    Ptr<ListPositionAllocator> bsPositionAlloc = CreateObject<ListPositionAllocator> ();
+    Ptr<ListPositionAllocator> uePositionAlloc = CreateObject<ListPositionAllocator> ();
     //EnB position
-    Vector v(roomLength * 0.5, roomLength * 0.5, nodeHeight);
-    positionAlloc->Add(v);
+    Vector v(roomLength/2, roomLength/2, bsHeight);
+    bsPositionAlloc->Add(v);
     enBPosition.push_back(v);
-
-    mobility.Install(ueNodes);
-    mobility.SetPositionAllocator(positionAlloc);
-    mobility.Install (enbNodes);
-    BuildingsHelper::Install (enbNodes);
-    // UE position
-    for(uint32_t i=0;i<nEnb;i++){
-        Ptr<UniformRandomVariable> posX = CreateObject<UniformRandomVariable> ();
-        posX->SetAttribute("Min", DoubleValue(enBPosition.at(i).x - roomLength * 0.5));
-        posX->SetAttribute("Max", DoubleValue(enBPosition.at(i).x + roomLength * 0.5));
-        Ptr<UniformRandomVariable> posY = CreateObject<UniformRandomVariable> ();
-        posY->SetAttribute("Min", DoubleValue(enBPosition.at(i).y - roomLength * 0.5));
-        posY->SetAttribute("Max", DoubleValue(enBPosition.at(i).y + roomLength * 0.5));
-        positionAlloc = CreateObject<ListPositionAllocator> ();
-        for(uint32_t j; j<nUE;j++){
-            positionAlloc->Add(Vector(posX->GetValue(), posY->GetValue(), nodeHeight));
-            mobility.SetPositionAllocator(positionAlloc);
-        }
-    }
-    mobility.Install(ueNodes);
+    MobilityHelper mobility;
     mobility.SetMobilityModel ("ns3::ConstantPositionMobilityModel");
-    mobility.Install (ueNodes);
-    BuildingsHelper::Install (ueNodes);
+    mobility.SetPositionAllocator(bsPositionAlloc);
+    mobility.Install (enbNodes);
+    cout << "enB Pos: ";
+    cout << "(" << enBPosition.at(0).x << "," << enBPosition.at(0).y << ")" << endl;
+    // UE position
+    for(uint32_t j=0; j<nUE;j++){
+        Ptr<UniformRandomVariable> posX = CreateObject<UniformRandomVariable> ();
+        Ptr<UniformRandomVariable> posY = CreateObject<UniformRandomVariable> ();
+        v = Vector(posX->GetValue()*roomLength, posY->GetValue()*roomLength, nodeHeight);
+        cout << "UE " << j << " POS ";
+        cout << "(" << v.x << "," << v.y << ")" << endl;
+        uePositionAlloc->Add(v);
+        UEPosition.push_back(v);
+    }
+    mobility.SetMobilityModel ("ns3::ConstantPositionMobilityModel");
+    mobility.SetPositionAllocator(uePositionAlloc);
+    mobility.Install(ueNodes);
 
     // Create Devices and install them in the Nodes (eNB and UE)
     NetDeviceContainer enbDevs;
@@ -124,7 +109,7 @@ int main (int argc, char *argv[])
     enbDevs = lteHelper->InstallEnbDevice (enbNodes);
     ueDevs = lteHelper->InstallUeDevice (ueNodes);
 
-    // Attach a UE to a eNB
+    // Attach a UE devices to a eNB
     lteHelper->Attach (ueDevs, enbDevs.Get (0));
 
     // Activate a data radio bearer
@@ -133,15 +118,15 @@ int main (int argc, char *argv[])
     lteHelper->ActivateDataRadioBearer (ueDevs, bearer);
 
     // RUN SIM
-    BuildingsHelper::MakeMobilityModelConsistent();
     Simulator::Stop (Seconds (simTime));
     lteHelper->EnableTraces ();
 
+    AnimationInterface anim("animation.xml");
+    anim.SetMobilityPollInterval(Seconds(.25));
+    anim.EnablePacketMetadata(true);
+
+    // Start simulation and frees up when done
     Simulator::Run ();
-
-    // GtkConfigStore config;
-    // config.ConfigureAttributes ();
-
     Simulator::Destroy ();
     return 0;
 }
