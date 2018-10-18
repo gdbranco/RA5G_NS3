@@ -42,13 +42,6 @@ int main (int argc, char *argv[])
     double nodeHeight = 1.5;
     double bsHeight = 5;
 
-
-    // HTTP Stuff
-    // Create HTTP Server
-
-    // Create HTTP Client
-
-
     // Container for all nodes
     NodeContainer allNodes;
     // LTE HELPER constructor
@@ -146,20 +139,38 @@ int main (int argc, char *argv[])
     /************APPLICATION SETUP********************/
     uint16_t serverPort = 9;
 
-    UdpEchoServerHelper echoServer(serverPort);
-    ApplicationContainer serverApps = echoServer.Install(remoteHost);
 
+
+
+    // HTTP Stuff
+    Ipv4Address serverAddress = remoteHost->GetObject<Ipv4>()->GetAddress(1,0).GetLocal();
+    // Create HTTP Server
+    ThreeGppHttpServerHelper serverHelper(serverAddress);
+    ApplicationContainer serverApps = serverHelper.Install(remoteHost);
+    // SETUP CALLBACKS FOR TRACING
+    Ptr<ThreeGppHttpServer> httpServer = serverApps.Get(0)->GetObject<ThreeGppHttpServer>();
+    // httpServer->TraceConnectWithoutContext("ConnectionEstablished", MakeCallback(&ServerConnectionEstablished));
+    // httpServer->TraceConnectWithoutContext("MainObject",MakeCallback(&EmbeddedObjectGenerated));
+    // httpServer->TraceConnectWithoutContext("Tx", MakeCallback(&ServerTx));
+    // SETUP HTTP VARIABLES
+    PointerValue varPtr;
+    httpServer->GetAttribute("Variables", varPtr);
+    Ptr<ThreeGppHttpVariables> httpVariables = varPtr.Get<ThreeGppHttpVariables>();
+    httpVariables->SetMainObjectSizeMean(102400); //100kB
+    httpVariables->SetMainObjectSizeStdDev(40960); //40kB
+    // START SERVER
     serverApps.Start(Seconds(0.5));
-
-    UdpEchoClientHelper echoClient(remoteHost->GetObject<Ipv4>()->GetAddress(1,0).GetLocal(),serverPort);
-    echoClient.SetAttribute("MaxPackets", UintegerValue(10000));
-    echoClient.SetAttribute("Interval", TimeValue(Seconds(1)));
-    echoClient.SetAttribute("PacketSize", UintegerValue(1024));
-
+    // Create HTTP Client
+    ThreeGppHttpClientHelper clientHelper(serverAddress);
     ApplicationContainer clientApps;
-    clientApps.Add(echoClient.Install(ueNodes));
+    clientApps.Add(clientHelper.Install(ueNodes));
+    // SETUP CALLBACKS FOR CLIENT TRACING
+    Ptr<ThreeGppHttpClient> htttpClient = clientApps.Get(0)->GetObject<ThreeGppHttpClient>();
+    // htttpClient->TraceConnectWithoutContext("RxMainObject", MakeCallback(&ClientMainObjectReceived));
+    // htttpClient->TraceConnectWithoutContext("RxEmbeddedObject", MakeCallback(&ClientEmbeddedObjectReceived));
+    // htttpClient->TraceConnectWithoutContext("Rx", MakeCallback(&ClientRx));
     clientApps.Start(Seconds(0.7));
-
+    clientApps.Stop(Seconds(simTime));
     /*********ENABLE TRACES****************/
 
     // RUN SIM
@@ -171,7 +182,7 @@ int main (int argc, char *argv[])
     anim.EnablePacketMetadata(true);
 
     // Start simulation and frees up when done
-    Simulator::Stop (Seconds (simTime));
+    Simulator::Stop (Seconds (simTime+1));
     Simulator::Run ();
     Simulator::Destroy ();
     return 0;

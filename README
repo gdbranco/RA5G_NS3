@@ -1,4 +1,24 @@
+---------------------------THIS IS CONTRIBUTION----------------------------------------
+5G Arch
+  Redes Convencionais
+    Cloud RAN (virtualização em nuvem)
+    Whitepaper 5GPP
+      Rede convencional
+        Link
+          Ponto a ponto, encaminhamento, Endereçamento Físico, MAC
+        Network
+          Fim a fim, roteamento, Endereçamento virtual, implemented
+    SDN (software defined networks)
+      A virtu L2 e L3 possuia algumas limitações, tais como conectar diferentes nuvens
+      OpenFlow (SDN Controller Software), exemplo de vantagem controle por tipo de fluxo. Determina por onde cada informação irá passar na rede por meio
+      de um controlador da rede.
+  NFV (network function virtualization)
+    Equipamentos de redes são proprietários, o que os tornam caros e imcompatíveis com outros fornecedores, além disso possuem limitações físicas (quantidade de portas, espaço etc)
+    Virtualizar o hardware
 
+
+
+---------------------------THIS IS ORIGINAL NS3 README.MD-------------------------------
     The Network Simulator, Version 3
     --------------------------------
 
