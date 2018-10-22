@@ -54,6 +54,7 @@ int main (int argc, char *argv[])
     lteHelper->SetEnbAntennaModelType("ns3::CosineAntennaModel");
     lteHelper->SetEnbAntennaModelAttribute("Orientation", DoubleValue(0));
     lteHelper->SetEnbAntennaModelAttribute("Beamwidth", DoubleValue(35));
+    lteHelper->SetEnbDeviceAttribute("DlBandwidth", UintegerValue(100));
     lteHelper->SetEnbAntennaModelAttribute("MaxGain", DoubleValue(400));
     // Default scheduler is PF, uncomment to use RR
     //lteHelper->SetSchedulerType ("ns3::RrFfMacScheduler");

@@ -1255,7 +1255,12 @@ PfFfMacScheduler::DoSchedDlCqiInfoReq (const struct FfMacSchedSapProvider::Sched
 {
   NS_LOG_FUNCTION (this);
   m_ffrSapProvider->ReportDlCqiInfo (params);
-
+  std::cout << "Tamanho da lista cqi\n" << params.m_cqiList.size() << std::endl;
+  std::cout << "Cqi para cada canal" << std::endl;
+  for(auto cqi: params.m_cqiList){
+    std::cout << cqi.A30 << std::endl;
+  }
+  
   for (unsigned int i = 0; i < params.m_cqiList.size (); i++)
     {
       if ( params.m_cqiList.at (i).m_cqiType == CqiListElement_s::P10 )
@@ -1985,6 +1990,8 @@ PfFfMacScheduler::RefreshDlCqiMaps (void)
           (*itP10).second--;
           itP10++;
         }
+        // std::cout << "P10" << std::endl;
+        // std::cout <<"\t" <<itP10->first << "," << itP10->second << std::endl;
     }
 
   // refresh DL CQI A30 Map
@@ -2008,6 +2015,8 @@ PfFfMacScheduler::RefreshDlCqiMaps (void)
           (*itA30).second--;
           itA30++;
         }
+        // std::cout << "A30" << std::endl;
+        // std::cout << "\t" << itA30->first << "," << itA30->second << std::endl;
     }
 
   return;
