@@ -492,6 +492,24 @@ PfFfMacScheduler::DoSchedDlTriggerReq (const struct FfMacSchedSapProvider::Sched
 
   RefreshDlCqiMaps ();
 
+
+  for (auto el: m_ueCqi){
+    std::cout << "UE #" << (int) el.first << std::endl;
+    std::cout << "CQI #" << (int) el.second.size() << std::endl;
+    std::cout << "[";
+    for (auto cqi: el.second){
+      std::cout << (int) cqi << ",";
+    }
+    std::cout << "]" << std::endl;
+  }
+  for (auto el : m_p10CqiRxed){
+    std::cout << "UE #" << (int) el.first << std::endl;
+    // if(el.second.m_ueSelected.m_sbCqi.size() > 0){
+    std::cout << "[";
+    std::cout << (int) el.second;
+    std::cout << "]" << std::endl;
+  }
+
   int rbgSize = GetRbgSize (m_cschedCellConfig.m_dlBandwidth);
   int rbgNum = m_cschedCellConfig.m_dlBandwidth / rbgSize;
   std::map <uint16_t, std::vector <uint16_t> > allocationMap; // RBs map per RNTI
@@ -1255,11 +1273,11 @@ PfFfMacScheduler::DoSchedDlCqiInfoReq (const struct FfMacSchedSapProvider::Sched
 {
   NS_LOG_FUNCTION (this);
   m_ffrSapProvider->ReportDlCqiInfo (params);
-  std::cout << "Tamanho da lista cqi\n" << params.m_cqiList.size() << std::endl;
-  std::cout << "Cqi para cada canal" << std::endl;
-  for(auto cqi: params.m_cqiList){
-    std::cout << cqi.A30 << std::endl;
-  }
+  // std::cout << "Tamanho da lista cqi\n" << params.m_cqiList.size() << std::endl;
+  // std::cout << "Cqi para cada canal" << std::endl;
+  // for(auto cqi: params.m_cqiList){
+  //   std::cout << cqi.A30 << std::endl;
+  // }
   
   for (unsigned int i = 0; i < params.m_cqiList.size (); i++)
     {
